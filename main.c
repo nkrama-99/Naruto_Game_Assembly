@@ -20,7 +20,6 @@ int currRasengan;
 int main() {
     // main game loop
     while (checkGameOver()) {
-        
         // check game pause or play
         checkGameStatus(); 
 
@@ -35,7 +34,6 @@ int main() {
         drawSasuke();
         drawRasengan();
         drawScore();
-
     }    
     
     return;
@@ -101,8 +99,6 @@ void controlRasengan() {
 
         currRasengan = rand() % 9;
     }
-
-    
 
     return;
 }
