@@ -57,11 +57,8 @@ int main() {
 }
 
 bool checkGameOver() {
-    // game over if sasuke touches position of one rasengan
-    for (int i=0; i<=8; i++) {
-        if (sasukePos.x == rasenganPos[i].x && sasukePos.y == rasenganPos[i].y) {
-            return true;
-        }
+    if (sasukePos.x == rasenganPos[currRasengan].x && sasukePos.y == rasenganPos[currRasengan].y) {
+        return true;
     }
 
     return false;
@@ -81,7 +78,7 @@ void drawBackground() {
 }
 
 void drawGameOver() {
-    
+    return;
 }
 
 void drawNaruto() {
@@ -105,14 +102,47 @@ void drawPauseScreen() {
 }
 
 void controlSasuke() {
+    
+    if (keyPressed == 1) {
+        // N
+        sasukePos.x = 0;
+        sasukePos.y = 0;
+    } else if (keyPressed == 2) {
+        // NE
+        sasukePos.x = 0;
+        sasukePos.y = 0;
+    } else if (keyPressed == 3) {
+        // E
+        sasukePos.x = 0;
+        sasukePos.y = 0;
+    } else if (keyPressed == 4) {
+        // SE
+        sasukePos.x = 0;
+        sasukePos.y = 0;
+    } else if (keyPressed == 5) {
+        // S
+        sasukePos.x = 0;
+        sasukePos.y = 0;
+    } else if (keyPressed == 6) {
+        // SW
+        sasukePos.x = 0;
+        sasukePos.y = 0;
+    } else if (keyPressed == 7) {
+        // W
+        sasukePos.x = 0;
+        sasukePos.y = 0;
+    } else if (keyPressed == 8) {
+        // NW
+        sasukePos.x = 0;
+        sasukePos.y = 0;
+    } else if (keyPressed == 100) {
+        // enable god mode - invincible?
+    }
+
     return;
 }
 
 void controlNaruto() {
-    return;
-}
-
-void controlRasengan() {
     // if currRasegan is reach center, reset and respawn at other location
     if (rasenganPos[currRasengan].x == 100 && rasenganPos[currRasengan].y == 100) {
         rasenganPos[currRasengan].x = rasenganInitPos[currRasengan].x;
@@ -121,6 +151,10 @@ void controlRasengan() {
         currRasengan = rand() % 8;
     }
 
+    return;
+}
+
+void controlRasengan() {
     rasenganPos[currRasengan].x += rasenganMoveDirection[currRasengan].x;
     rasenganPos[currRasengan].y += rasenganMoveDirection[currRasengan].y;
 
