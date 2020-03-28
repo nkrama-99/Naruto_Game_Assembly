@@ -16,7 +16,24 @@ loc sasukePos;
 loc rasenganPos[8];
 loc rasenganInitPos[8];
 int currRasengan;
+loc rasenganMoveDirection[8];
 
+// functions
+bool checkGameOver();
+void checkGameStatus();
+void drawBackground();
+void drawGameOver();
+void drawNaruto();
+void drawSasuke();
+void drawRasengan();
+void drawScore();
+void drawPauseScreen();
+void controlSasuke();
+void controlNaruto();
+void controlRasengan();
+
+
+// main code
 int main() {
     // main game loop
     while (checkGameOver()) {
@@ -36,7 +53,7 @@ int main() {
         drawScore();
     }    
     
-    return;
+    return 0;
 }
 
 bool checkGameOver() {
@@ -61,6 +78,10 @@ void checkGameStatus() {
 
 void drawBackground() {
     return;
+}
+
+void drawGameOver() {
+    
 }
 
 void drawNaruto() {
@@ -97,9 +118,11 @@ void controlRasengan() {
         rasenganPos[currRasengan].x = rasenganInitPos[currRasengan].x;
         rasenganPos[currRasengan].y = rasenganInitPos[currRasengan].y;
 
-        currRasengan = rand() % 9;
+        currRasengan = rand() % 8;
     }
+
+    rasenganPos[currRasengan].x += rasenganMoveDirection[currRasengan].x;
+    rasenganPos[currRasengan].y += rasenganMoveDirection[currRasengan].y;
 
     return;
 }
-
