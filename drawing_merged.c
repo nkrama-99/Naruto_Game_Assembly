@@ -333,7 +333,6 @@ void await_vsync();
 void swap_buffers();
 
 volatile int pixel_buffer_start; // global variable
-
 volatile int* pixel_ctrl_ptr = (int*)0xFF203020;
 
 int main(void)
