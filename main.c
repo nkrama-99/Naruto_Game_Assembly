@@ -614,6 +614,30 @@ void drawNaruto() {
     return;
 }
 
+
+void cls_naruto() {
+
+    int i = 0, j = 0;
+
+    for (int k = 0; k < 320 * 2 * 240 - 1; k += 2) {
+
+        int red = ((data_naruto[k + 1] & 0xF8) >> 3) << 11;
+        int green = (((data_naruto[k] & 0xE0) >> 5)) | ((data_naruto[k + 1] & 0x7) << 3);
+        int blue = (data_naruto[k] & 0x1f);
+
+        short int p = red | ((green << 5) | blue);
+
+        plot_pixel_naruto(0 + i, j, p);
+
+        i += 1;
+        if (i == 320) {
+            i = 0;
+            j += 1;
+        }
+        
+    }
+}
+
 void drawSasuke() {
 
     for (int i = 0; i < WIDTH_SASUKE; i++)
@@ -788,29 +812,6 @@ void cls_sasuke() {
 
         i += 1;
         if (i == WIDTH_SASUKE) {
-            i = 0;
-            j += 1;
-        }
-        
-    }
-}
-
-void cls_naruto() {
-
-    int i = 0, j = 0;
-
-    for (int k = 0; k < 320 * 2 * 240 - 1; k += 2) {
-
-        int red = ((data_naruto[k + 1] & 0xF8) >> 3) << 11;
-        int green = (((data_naruto[k] & 0xE0) >> 5)) | ((data_naruto[k + 1] & 0x7) << 3);
-        int blue = (data_naruto[k] & 0x1f);
-
-        short int p = red | ((green << 5) | blue);
-
-        plot_pixel_naruto(0 + i, j, p);
-
-        i += 1;
-        if (i == 320) {
             i = 0;
             j += 1;
         }
