@@ -366,7 +366,7 @@ void swap(int*, int*);
 void await_vsync();
 void swap_buffers();
 
-void checkInputs();
+void checkInputOutput();
 bool checkGameOver();
 void checkGameStatus();
 void drawGameOver();
@@ -459,13 +459,14 @@ int main() {
     rasenganMoveDirection[7].y = 1;
 
     // main game loop
-    // while (checkGameOver()) {
-    while (true) {
+    while (!checkGameOver()) {
+    // while (true) {
+
         // check game pause or play
         checkGameStatus(); 
 
         // check inputs
-        checkInputs();
+        checkInputOutput();
 
         // game logic
         controlSasuke();
@@ -474,20 +475,77 @@ int main() {
 
         // draw the game
         drawGame();
+
     }
+
+    drawGameOver();
     
     return 0;
 }
 
-void checkInputs() {
+void checkInputOutput() {
     // update values of switch and 
     keyPressed = *KEY_ptr;
-    *LEDR_ptr = keyPressed;
+    switchToggled = *SW_ptr;
+    *LEDR_ptr = scoreCounter;
 }
 
 bool checkGameOver() {
-    if (sasukePos.x == rasenganPos[currRasengan].x && sasukePos.y == rasenganPos[currRasengan].y) {
-        return true;
+    // N
+    if (currRasengan == 0) {
+        if ((rasenganPos[currRasengan].x - sasukePos.x == 0) 
+            && (rasenganPos[currRasengan].y - sasukePos.y >= 0)) {
+            return true;
+        }
+    }
+    // NE
+    else if (currRasengan == 1) {
+        if ((rasenganPos[currRasengan].x - sasukePos.x <= 0) 
+            && (rasenganPos[currRasengan].y - sasukePos.y >= 0)) {
+            return true;
+        }
+    }
+    // E
+    else if (currRasengan == 2) {
+        if ((rasenganPos[currRasengan].x - sasukePos.x <= 0) 
+            && (rasenganPos[currRasengan].y - sasukePos.y == 0)) {
+            return true;
+        }
+    }
+    // SE
+    else if (currRasengan == 3) {
+        if ((rasenganPos[currRasengan].x - sasukePos.x <= 0) 
+            && (rasenganPos[currRasengan].y - sasukePos.y <= 0)) {
+            return true;
+        }
+    }
+    // S
+    else if (currRasengan == 4) {
+        if ((rasenganPos[currRasengan].x - sasukePos.x == 0) 
+            && (rasenganPos[currRasengan].y - sasukePos.y <= 0)) {
+            return true;
+        }
+    }
+    // SW
+    else if (currRasengan == 5) {
+        if ((rasenganPos[currRasengan].x - sasukePos.x >= 0) 
+            && (rasenganPos[currRasengan].y - sasukePos.y <= 0)) {
+            return true;
+        }
+    }
+    // W
+    else if (currRasengan == 6) {
+        if ((rasenganPos[currRasengan].x - sasukePos.x >= 0) 
+            && (rasenganPos[currRasengan].y - sasukePos.y == 0)) {
+            return true;
+        }
+    }
+    // NW
+    else if (currRasengan == 7) {
+        if ((rasenganPos[currRasengan].x - sasukePos.x >= 0) 
+            && (rasenganPos[currRasengan].y - sasukePos.y >= 0)) {
+            return true;
+        }
     }
 
     return false;
@@ -497,6 +555,7 @@ void checkGameStatus() {
     // if switch 0 is on, start game
     while(switchToggled > 0) {
         drawPauseScreen();
+        checkInputOutput();
     }
 
     return;
@@ -511,7 +570,7 @@ void checkRasenganSpeed() {
 }
 
 void drawGameOver() {
-    return;
+    *LEDR_ptr = 0b101010101;
 }
 
 void drawGame() {
