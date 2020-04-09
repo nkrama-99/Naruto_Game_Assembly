@@ -865,6 +865,9 @@ int seg7[] = {0b00111111, 0b00000110, 0b01011011, 0b01001111,
               0b01100110, 0b01101101, 0b01111101, 0b00000111, 
               0b01111111, 0b01100111, 0b01110111, 0b00011111,
               0b01001110, 0b00111101, 0b01001111, 0b01000111};
+volatile int *timer_load_ptr = 0xFFFEC600;
+volatile int *timer_control_ptr = 0xFFFEC608;
+volatile int *timer_f_bit_ptr = 0xFFFEC60C;
 
 // sasuke stuff
 loc sasukePos;
@@ -877,6 +880,7 @@ int currRasengan;
 int scoreCounter = 0;
 int rasenganSpeed = 6;
 int waveCounter = 0;
+int timerTrigger = 0;
 
 // drawing stuff
 volatile int pixel_buffer_start;
@@ -1004,10 +1008,13 @@ int main() {
     *(pixel_ctrl_ptr + 1) = (int)0xC0000000;
     pixel_buffer_start = *(pixel_ctrl_ptr + 1); // we draw on the back buffer	
 
+    // initializing timer
+    *timer_load_ptr = 200000000 * 30;
+    *timer_control_ptr = 0b1;
 
     // main game loop
-    // while (!checkGameOver()) {
-    while (true) {
+    while (!checkGameOver()) {
+    // while (true) {
 
         // check game pause or play
         checkGameStatus(); 
@@ -1035,72 +1042,78 @@ void checkInputOutput() {
     // inputs 
     keyPressed = *KEY_ptr;
     switchToggled = *SW_ptr;
-
+    timerTrigger = *timer_f_bit_ptr;
+    
     // outputs
-    *LEDR_ptr = scoreCounter;
+    *LEDR_ptr = timerTrigger;
     *HEX3_0_ptr = seg7[scoreCounter & 0xF] | seg7[scoreCounter>>4 & 0xF]<<8  | seg7[scoreCounter>>8]<<16;
 }
 
 bool checkGameOver() {
-    // N
-    if (currRasengan == 0) {
-        if ((rasenganPos[currRasengan].x - sasukePos.x == 0) 
-            && (rasenganPos[currRasengan].y - sasukePos.y >= 0)) {
-            return true;
-        }
-    }
-    // NE
-    else if (currRasengan == 1) {
-        if ((rasenganPos[currRasengan].x - sasukePos.x <= 0) 
-            && (rasenganPos[currRasengan].y - sasukePos.y >= 0)) {
-            return true;
-        }
-    }
-    // E
-    else if (currRasengan == 2) {
-        if ((rasenganPos[currRasengan].x - sasukePos.x <= 0) 
-            && (rasenganPos[currRasengan].y - sasukePos.y == 0)) {
-            return true;
-        }
-    }
-    // SE
-    else if (currRasengan == 3) {
-        if ((rasenganPos[currRasengan].x - sasukePos.x <= 0) 
-            && (rasenganPos[currRasengan].y - sasukePos.y <= 0)) {
-            return true;
-        }
-    }
-    // S
-    else if (currRasengan == 4) {
-        if ((rasenganPos[currRasengan].x - sasukePos.x == 0) 
-            && (rasenganPos[currRasengan].y - sasukePos.y <= 0)) {
-            return true;
-        }
-    }
-    // SW
-    else if (currRasengan == 5) {
-        if ((rasenganPos[currRasengan].x - sasukePos.x >= 0) 
-            && (rasenganPos[currRasengan].y - sasukePos.y <= 0)) {
-            return true;
-        }
-    }
-    // W
-    else if (currRasengan == 6) {
-        if ((rasenganPos[currRasengan].x - sasukePos.x >= 0) 
-            && (rasenganPos[currRasengan].y - sasukePos.y == 0)) {
-            return true;
-        }
-    }
-    // NW
-    else if (currRasengan == 7) {
-        if ((rasenganPos[currRasengan].x - sasukePos.x >= 0) 
-            && (rasenganPos[currRasengan].y - sasukePos.y >= 0)) {
-            return true;
-        }
-    }
+    
+    // // N
+    // if (currRasengan == 0) {
+    //     if ((rasenganPos[currRasengan].x - sasukePos.x == 0) 
+    //         && (rasenganPos[currRasengan].y - sasukePos.y >= 0)) {
+    //         return true;
+    //     }
+    // }
+    // // NE
+    // else if (currRasengan == 1) {
+    //     if ((rasenganPos[currRasengan].x - sasukePos.x <= 0) 
+    //         && (rasenganPos[currRasengan].y - sasukePos.y >= 0)) {
+    //         return true;
+    //     }
+    // }
+    // // E
+    // else if (currRasengan == 2) {
+    //     if ((rasenganPos[currRasengan].x - sasukePos.x <= 0) 
+    //         && (rasenganPos[currRasengan].y - sasukePos.y == 0)) {
+    //         return true;
+    //     }
+    // }
+    // // SE
+    // else if (currRasengan == 3) {
+    //     if ((rasenganPos[currRasengan].x - sasukePos.x <= 0) 
+    //         && (rasenganPos[currRasengan].y - sasukePos.y <= 0)) {
+    //         return true;
+    //     }
+    // }
+    // // S
+    // else if (currRasengan == 4) {
+    //     if ((rasenganPos[currRasengan].x - sasukePos.x == 0) 
+    //         && (rasenganPos[currRasengan].y - sasukePos.y <= 0)) {
+    //         return true;
+    //     }
+    // }
+    // // SW
+    // else if (currRasengan == 5) {
+    //     if ((rasenganPos[currRasengan].x - sasukePos.x >= 0) 
+    //         && (rasenganPos[currRasengan].y - sasukePos.y <= 0)) {
+    //         return true;
+    //     }
+    // }
+    // // W
+    // else if (currRasengan == 6) {
+    //     if ((rasenganPos[currRasengan].x - sasukePos.x >= 0) 
+    //         && (rasenganPos[currRasengan].y - sasukePos.y == 0)) {
+    //         return true;
+    //     }
+    // }
+    // // NW
+    // else if (currRasengan == 7) {
+    //     if ((rasenganPos[currRasengan].x - sasukePos.x >= 0) 
+    //         && (rasenganPos[currRasengan].y - sasukePos.y >= 0)) {
+    //         return true;
+    //     }
+    // }
 
-    // rasengan is too fast
-    if (rasenganSpeed >= 40) {
+    // // rasengan is too fast
+    // if (rasenganSpeed >= 40) {
+    //     return true;
+    // }
+
+    if (timerTrigger == 1) {
         return true;
     }
 
