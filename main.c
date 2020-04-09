@@ -349,7 +349,7 @@ loc rasenganInitPos[8];
 loc rasenganMoveDirection[8];
 int currRasengan;
 int scoreCounter = 0;
-int rasenganSpeed = 3;
+int rasenganSpeed = 6;
 int waveCounter = 0;
 
 // drawing stuff
@@ -386,54 +386,54 @@ int main() {
     // Rasengan Current Position
     // N
     rasenganPos[0].x = 160;
-    rasenganPos[0].y = 0;
+    rasenganPos[0].y = 0 + HEIGHT_NARUTO/2;
     // NE
-    rasenganPos[1].x = 320;
-    rasenganPos[1].y = 0;
+    rasenganPos[1].x = 320 - WIDTH_NARUTO/2;
+    rasenganPos[1].y = 0 + HEIGHT_NARUTO/2;
     // E
-    rasenganPos[2].x = 320;
+    rasenganPos[2].x = 320 - WIDTH_NARUTO/2;
     rasenganPos[2].y = 120;
     // SE
-    rasenganPos[3].x = 320;
-    rasenganPos[3].y = 240;
+    rasenganPos[3].x = 320 - WIDTH_NARUTO/2;
+    rasenganPos[3].y = 240 - HEIGHT_NARUTO/2;
     // S
     rasenganPos[4].x = 160;
-    rasenganPos[4].y = 240;
+    rasenganPos[4].y = 240 - HEIGHT_NARUTO/2;
     // SW
-    rasenganPos[5].x = 0;
-    rasenganPos[5].y = 240;
+    rasenganPos[5].x = 0 + WIDTH_NARUTO/2;
+    rasenganPos[5].y = 240 - HEIGHT_NARUTO/2;
     // W
-    rasenganPos[6].x = 0;
+    rasenganPos[6].x = 0 + WIDTH_NARUTO/2;
     rasenganPos[6].y = 120;
     // NW
-    rasenganPos[7].x = 0;
-    rasenganPos[7].y = 0;
+    rasenganPos[7].x = 0 + WIDTH_NARUTO/2;
+    rasenganPos[7].y = 0 + HEIGHT_NARUTO/2;
 
     // Rasengan Init Position
     // N
     rasenganInitPos[0].x = 160;
-    rasenganInitPos[0].y = 0;
+    rasenganInitPos[0].y = 0 + HEIGHT_NARUTO/2;
     // NE
-    rasenganInitPos[1].x = 320;
-    rasenganInitPos[1].y = 0;
+    rasenganInitPos[1].x = 320 - WIDTH_NARUTO/2;
+    rasenganInitPos[1].y = 0 + HEIGHT_NARUTO/2;
     // E
-    rasenganInitPos[2].x = 320;
+    rasenganInitPos[2].x = 320 - WIDTH_NARUTO/2;
     rasenganInitPos[2].y = 120;
     // SE
-    rasenganInitPos[3].x = 320;
-    rasenganInitPos[3].y = 240;
+    rasenganInitPos[3].x = 320 - WIDTH_NARUTO/2;
+    rasenganInitPos[3].y = 240 - HEIGHT_NARUTO/2;
     // S
     rasenganInitPos[4].x = 160;
-    rasenganInitPos[4].y = 240;
+    rasenganInitPos[4].y = 240 - HEIGHT_NARUTO/2;
     // SW
-    rasenganInitPos[5].x = 0;
-    rasenganInitPos[5].y = 240;
+    rasenganInitPos[5].x = 0 + WIDTH_NARUTO/2;
+    rasenganInitPos[5].y = 240 - HEIGHT_NARUTO/2;
     // W
-    rasenganInitPos[6].x = 0;
+    rasenganInitPos[6].x = 0 + WIDTH_NARUTO/2;
     rasenganInitPos[6].y = 120;
     // NW
-    rasenganInitPos[7].x = 0;
-    rasenganInitPos[7].y = 0;
+    rasenganInitPos[7].x = 0 + WIDTH_NARUTO/2;
+    rasenganInitPos[7].y = 0 + HEIGHT_NARUTO/2;
 
     // Rasengan Delta
     // N
@@ -482,9 +482,6 @@ int main() {
     // while (!checkGameOver()) {
     while (true) {
 
-        // draw the game
-        drawGame();
-
         // check game pause or play
         checkGameStatus(); 
 
@@ -496,6 +493,9 @@ int main() {
         controlNaruto();
         controlRasengan();
         checkRasenganSpeed();
+
+        // draw the game
+        drawGame();
 
     }
 
@@ -588,8 +588,8 @@ void checkGameStatus() {
 }
 
 void checkRasenganSpeed() {
-    if (scoreCounter % 10 == 0 && scoreCounter != 0) {
-        rasenganSpeed += 3;
+    if (scoreCounter % 5 == 0 && scoreCounter != 0) {
+        rasenganSpeed += 2;
         waveCounter++;
     }
 
@@ -622,48 +622,6 @@ void drawPauseScreen() {
 
 void controlSasuke() {
     
-    // if (keyPressed == 0b0100) {
-    //     // N
-    //     sasukePos.x = 160;
-    //     sasukePos.y = 100;
-    // } else if (keyPressed == 0b0101) {
-    //     // NE
-    //     sasukePos.x = 180;
-    //     sasukePos.y = 100;
-    // } else if (keyPressed == 0b0001) {
-    //     // E
-    //     sasukePos.x = 180;
-    //     sasukePos.y = 120;
-    // } else if (keyPressed == 0b0011) {
-    //     // SE
-    //     sasukePos.x = 180;
-    //     sasukePos.y = 140;
-    // } else if (keyPressed == 0b0010) {
-    //     // S
-    //     sasukePos.x = 160;
-    //     sasukePos.y = 140;
-    // } else if (keyPressed == 0b1010) {
-    //     // SW
-    //     sasukePos.x = 140;
-    //     sasukePos.y = 140;
-    // } else if (keyPressed == 0b1000) {
-    //     // W
-    //     sasukePos.x = 140;
-    //     sasukePos.y = 120;
-    // } else if (keyPressed == 0b1100) {
-    //     // NW
-    //     sasukePos.x = 140;
-    //     sasukePos.y = 100;
-    // } else if (keyPressed == 0b1111) {
-    //     // enable god mode - invincible?
-    //     sasukePos.x = 160;
-    //     sasukePos.y = 120;
-    // } else {
-    //     // centre
-    //     sasukePos.x = 160;
-    //     sasukePos.y = 120;
-    // }
-
     if (keyPressed == 0b0100) {
         // N
         sasukePos.x = 160;
@@ -710,15 +668,6 @@ void controlSasuke() {
 }
 
 void controlNaruto() {
-    // if currRasegan reach center, reset and respawn at other location
-    // use rasenganInitposition for Naruto too
-    
-    // if (rasenganPos[currRasengan].x == 160 && rasenganPos[currRasengan].y == 120) {
-    //     currRasengan = rand() % 8;
-    //     rasenganPos[currRasengan].x = rasenganInitPos[currRasengan].x;
-    //     rasenganPos[currRasengan].y = rasenganInitPos[currRasengan].y;
-    //     scoreCounter += 1;
-    // }
 
     // N
     if (currRasengan == 0) {
@@ -841,10 +790,12 @@ void cls() {
         
     }
 
-    i = rasenganPos[currRasengan].x;
-    j = rasenganPos[currRasengan].y;
-    // i = rasenganPos[currRasengan].x - WIDTH_NARUTO/2;
-    // j = rasenganPos[currRasengan].y - HEIGHT_NARUTO/2;
+    // i = rasenganPos[currRasengan].x;
+    // j = rasenganPos[currRasengan].y;
+    int rasengan_x = rasenganPos[currRasengan].x - WIDTH_NARUTO/2;
+    int rasengan_y = rasenganPos[currRasengan].y - HEIGHT_NARUTO/2;
+    i = rasengan_x;
+    j = rasengan_y;
 
     for (int k = 0; k < WIDTH_NARUTO * 2 * HEIGHT_NARUTO - 1; k += 2) {
 
@@ -858,18 +809,20 @@ void cls() {
 
         i += 1;
         
-        if (i == rasenganPos[currRasengan].x + WIDTH_NARUTO) {
-            i = rasenganPos[currRasengan].x;
+        if (i == rasengan_x + WIDTH_NARUTO) {
+            i = rasengan_x;
             j += 1;
         }
 
     }
 
 
-    i = sasukePos.x;
-    j = sasukePos.y;
-    // i = sasukePos.x - WIDTH_SASUKE/2;
-    // j = sasukePos.y - HEIGHT_SASUKE/2;
+    // i = sasukePos.x;
+    // j = sasukePos.y;
+    int sasuke_x = sasukePos.x - WIDTH_SASUKE/2;
+    int sasuke_y = sasukePos.y - HEIGHT_SASUKE/2;
+    i = sasuke_x;
+    j = sasuke_x;
 
     for (int k = 0; k < WIDTH_SASUKE * 2 * HEIGHT_SASUKE - 1; k += 2) {
 
@@ -883,8 +836,8 @@ void cls() {
 
         i += 1;
         
-        if (i == sasukePos.x + WIDTH_SASUKE) {
-            i = sasukePos.x;
+        if (i == sasuke_x + WIDTH_SASUKE) {
+            i = sasuke_x;
             j += 1;
         }
 
