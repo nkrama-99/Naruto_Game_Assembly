@@ -1116,6 +1116,8 @@ bool checkGameOver() {
     }                                                                                                                                       
 
     if (timerTrigger == 1) {
+        waveCounter = 2184;
+        checkInputOutput();
         return true;
     }
 
