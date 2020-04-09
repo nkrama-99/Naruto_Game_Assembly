@@ -892,6 +892,7 @@ void plot_pixel_bg(int x, int y, short int line_color);
 void plot_pixel(int x, int y, short int line_color);
 void cls();
 void cls_pause();
+void cls_game_end();
 void swap(int*, int*);
 void await_vsync();
 void swap_buffers();
@@ -1008,8 +1009,8 @@ int main() {
 
 
     // main game loop
-    // while (!checkGameOver()) {
-    while (true) {
+    while (!checkGameOver()) {
+    // while (true) {
 
         // check game pause or play
         checkGameStatus(); 
@@ -1129,7 +1130,9 @@ void checkRasenganSpeed() {
 }
 
 void drawGameOver() {
-    *LEDR_ptr = 0b101010101;
+    cls_game_end();
+    await_vsync();
+    swap_buffers();
 }
 
 void drawGame() {
