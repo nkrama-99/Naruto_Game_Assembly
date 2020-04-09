@@ -349,7 +349,7 @@ loc rasenganInitPos[8];
 loc rasenganMoveDirection[8];
 int currRasengan;
 int scoreCounter = 0;
-int rasenganSpeed = 10;
+int rasenganSpeed = 3;
 int waveCounter = 0;
 
 // drawing stuff
@@ -438,28 +438,28 @@ int main() {
     // Rasengan Delta
     // N
     rasenganMoveDirection[0].x = 0;
-    rasenganMoveDirection[0].y = 1;
+    rasenganMoveDirection[0].y = 3;
     // NE
-    rasenganMoveDirection[1].x = -1;
-    rasenganMoveDirection[1].y = 1;
+    rasenganMoveDirection[1].x = -4;
+    rasenganMoveDirection[1].y = 3;
     // E
-    rasenganMoveDirection[2].x = -1;
+    rasenganMoveDirection[2].x = -4;
     rasenganMoveDirection[2].y = 0;
     // SE
-    rasenganMoveDirection[3].x = -1;
-    rasenganMoveDirection[3].y = -1;
+    rasenganMoveDirection[3].x = -4;
+    rasenganMoveDirection[3].y = -3;
     // S
     rasenganMoveDirection[4].x = 0;
-    rasenganMoveDirection[4].y = -1;
+    rasenganMoveDirection[4].y = -3;
     // SW
-    rasenganMoveDirection[5].x = 1;
-    rasenganMoveDirection[5].y = -1;
+    rasenganMoveDirection[5].x = 4;
+    rasenganMoveDirection[5].y = -3;
     // W
-    rasenganMoveDirection[6].x = 1;
+    rasenganMoveDirection[6].x = 4;
     rasenganMoveDirection[6].y = 0;
     // NW
-    rasenganMoveDirection[7].x = 1;
-    rasenganMoveDirection[7].y = 1;
+    rasenganMoveDirection[7].x = 4;
+    rasenganMoveDirection[7].y = 3;
 
     // Drawing initial Setup
     /* Read location of the pixel buffer from the pixel buffer controller */
@@ -479,8 +479,8 @@ int main() {
 
 
     // main game loop
-    while (!checkGameOver()) {
-    // while (true) {
+    // while (!checkGameOver()) {
+    while (true) {
 
         // draw the game
         drawGame();
@@ -496,7 +496,7 @@ int main() {
         controlNaruto();
         controlRasengan();
         checkRasenganSpeed();
-        
+
     }
 
     drawGameOver();
@@ -589,7 +589,7 @@ void checkGameStatus() {
 
 void checkRasenganSpeed() {
     if (scoreCounter % 10 == 0 && scoreCounter != 0) {
-        rasenganSpeed += 10;
+        rasenganSpeed += 3;
         waveCounter++;
     }
 
