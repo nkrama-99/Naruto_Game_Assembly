@@ -600,11 +600,85 @@ void controlSasuke() {
 void controlNaruto() {
     // if currRasegan reach center, reset and respawn at other location
     // use rasenganInitposition for Naruto too
-    if (rasenganPos[currRasengan].x == 160 && rasenganPos[currRasengan].y == 120) {
-        currRasengan = rand() % 8;
-        rasenganPos[currRasengan].x = rasenganInitPos[currRasengan].x;
-        rasenganPos[currRasengan].y = rasenganInitPos[currRasengan].y;
-        scoreCounter += 1;
+    
+    // if (rasenganPos[currRasengan].x == 160 && rasenganPos[currRasengan].y == 120) {
+    //     currRasengan = rand() % 8;
+    //     rasenganPos[currRasengan].x = rasenganInitPos[currRasengan].x;
+    //     rasenganPos[currRasengan].y = rasenganInitPos[currRasengan].y;
+    //     scoreCounter += 1;
+    // }
+
+    // N
+    if (currRasengan == 0) {
+        if (rasenganPos[currRasengan].x == 160 && rasenganPos[currRasengan].y >= 120) {
+            currRasengan = rand() % 8;
+            rasenganPos[currRasengan].x = rasenganInitPos[currRasengan].x;
+            rasenganPos[currRasengan].y = rasenganInitPos[currRasengan].y;
+            scoreCounter += 1;
+        }
+    }
+    // NE
+    else if (currRasengan == 1) {
+        if (rasenganPos[currRasengan].x <= 160 && rasenganPos[currRasengan].y >= 120) {
+            currRasengan = rand() % 8;
+            rasenganPos[currRasengan].x = rasenganInitPos[currRasengan].x;
+            rasenganPos[currRasengan].y = rasenganInitPos[currRasengan].y;
+            scoreCounter += 1;
+        }
+    }
+    // E
+    else if (currRasengan == 2) {
+        if (rasenganPos[currRasengan].x <= 160 && rasenganPos[currRasengan].y == 120) {
+            currRasengan = rand() % 8;
+            rasenganPos[currRasengan].x = rasenganInitPos[currRasengan].x;
+            rasenganPos[currRasengan].y = rasenganInitPos[currRasengan].y;
+            scoreCounter += 1;
+        }
+    }
+    // SE
+    else if (currRasengan == 3) {
+        if (rasenganPos[currRasengan].x <= 160 && rasenganPos[currRasengan].y <= 120) {
+            currRasengan = rand() % 8;
+            rasenganPos[currRasengan].x = rasenganInitPos[currRasengan].x;
+            rasenganPos[currRasengan].y = rasenganInitPos[currRasengan].y;
+            scoreCounter += 1;
+        }
+    }
+    // S
+    else if (currRasengan == 4) {
+        if (rasenganPos[currRasengan].x == 160 && rasenganPos[currRasengan].y <= 120) {
+            currRasengan = rand() % 8;
+            rasenganPos[currRasengan].x = rasenganInitPos[currRasengan].x;
+            rasenganPos[currRasengan].y = rasenganInitPos[currRasengan].y;
+            scoreCounter += 1;
+        }
+    }
+    // SW
+    else if (currRasengan == 5) {
+        if (rasenganPos[currRasengan].x >= 160 && rasenganPos[currRasengan].y <= 120) {
+            currRasengan = rand() % 8;
+            rasenganPos[currRasengan].x = rasenganInitPos[currRasengan].x;
+            rasenganPos[currRasengan].y = rasenganInitPos[currRasengan].y;
+            scoreCounter += 1;
+        }
+    }
+    // W
+    else if (currRasengan == 6) {
+        if (rasenganPos[currRasengan].x >= 160 && rasenganPos[currRasengan].y == 120) {
+            currRasengan = rand() % 8;
+            rasenganPos[currRasengan].x = rasenganInitPos[currRasengan].x;
+            rasenganPos[currRasengan].y = rasenganInitPos[currRasengan].y;
+            scoreCounter += 1;
+        }
+    }
+    // NW
+    else if (currRasengan == 7) {
+        if (rasenganPos[currRasengan].x >= 160 && rasenganPos[currRasengan].y >= 120) {
+            currRasengan = rand() % 8;
+            rasenganPos[currRasengan].x = rasenganInitPos[currRasengan].x;
+            rasenganPos[currRasengan].y = rasenganInitPos[currRasengan].y;
+            scoreCounter += 1;
+        }
     }
 
     return;
