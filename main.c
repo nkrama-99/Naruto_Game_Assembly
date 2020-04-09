@@ -318,22 +318,14 @@ unsigned int data_bg[] = {
 #define WIDTH_SASUKE 11
 #define HEIGHT_SASUKE 23
 
-#define ORIGIN_SASUKE_X_LEFT 0
-#define ORIGIN_SASUKE_Y_LEFT 120
-
-#define ORIGIN_SASUKE_X_TOP 160
-#define ORIGIN_SASUKE_Y_TOP 0
-
-#define ORIGIN_SASUKE_X_RIGHT (320 - WIDTH_SASUKE)
-#define ORIGIN_SASUKE_Y_RIGHT (120)
-
-#define ORIGIN_SASUKE_X_BOTTOM 160
-#define ORIGIN_SASUKE_Y_BOTTOM (240 - HEIGHT_SASUKE)
-
 #define WIDTH_NARUTO 21
 #define HEIGHT_NARUTO 23
-#define ORIGIN_NARUTO_X 160
-#define ORIGIN_NARUTO_Y 120
+
+// #define ORIGIN_SASUKE_X 0
+// #define ORIGIN_SASUKE_Y 120
+
+// #define ORIGIN_NARUTO_X 0
+// #define ORIGIN_NARUTO_Y 0
 
 // declaration of values and keys used
 typedef struct currentLocation{
@@ -341,15 +333,25 @@ typedef struct currentLocation{
     int y;
 } loc;
 
+// ARM stuff
 int keyPressed;
-int switchStatus;
+int switchToggled;
+volatile int *SW_ptr = 0xFF200040;
+volatile int *KEY_ptr = 0xFF200050;
+volatile int *LEDR_ptr = 0xFF200000;
+
+// sasuke stuff
 loc sasukePos;
+
+// naruto and rasengan stuff
 loc rasenganPos[8];
 loc rasenganInitPos[8];
-int currRasengan;
 loc rasenganMoveDirection[8];
+int currRasengan;
 int scoreCounter = 0;
 int rasenganSpeed = 10;
+
+// drawing stuff
 volatile int pixel_buffer_start;
 volatile int* pixel_ctrl_ptr = (int*)0xFF203020;
 
@@ -364,6 +366,7 @@ void swap(int*, int*);
 void await_vsync();
 void swap_buffers();
 
+void checkInputs();
 bool checkGameOver();
 void checkGameStatus();
 void drawGameOver();
@@ -373,7 +376,6 @@ void drawPauseScreen();
 void controlSasuke();
 void controlNaruto();
 void controlRasengan();
-
 
 // main code
 int main() {
@@ -462,6 +464,9 @@ int main() {
         // check game pause or play
         checkGameStatus(); 
 
+        // check inputs
+        checkInputs();
+
         // game logic
         controlSasuke();
         controlNaruto();
@@ -474,6 +479,12 @@ int main() {
     return 0;
 }
 
+void checkInputs() {
+    // update values of switch and 
+    keyPressed = *KEY_ptr;
+    *LEDR_ptr = keyPressed;
+}
+
 bool checkGameOver() {
     if (sasukePos.x == rasenganPos[currRasengan].x && sasukePos.y == rasenganPos[currRasengan].y) {
         return true;
@@ -484,7 +495,7 @@ bool checkGameOver() {
 
 void checkGameStatus() {
     // if switch 0 is on, start game
-    while(switchStatus > 0) {
+    while(switchToggled > 0) {
         drawPauseScreen();
     }
 
@@ -534,7 +545,7 @@ void drawScore() {
 }
 
 void drawPauseScreen() {
-    // pause screen responds to switchStatus
+    // pause screen responds to switchToggled
     // also used as start screen?
     return;
 }
@@ -644,8 +655,10 @@ void cls() {
         
     }
 
-    i = ORIGIN_NARUTO_X;
-    j = ORIGIN_NARUTO_Y;
+    i = rasenganPos[currRasengan].x;
+    j = rasenganPos[currRasengan].y;
+    // i = rasenganPos[currRasengan].x - WIDTH_NARUTO/2;
+    // j = rasenganPos[currRasengan].y - HEIGHT_NARUTO/2;
 
     for (int k = 0; k < WIDTH_NARUTO * 2 * HEIGHT_NARUTO - 1; k += 2) {
 
@@ -659,15 +672,18 @@ void cls() {
 
         i += 1;
         
-        if (i == ORIGIN_NARUTO_X + WIDTH_NARUTO) {
-            i = ORIGIN_NARUTO_X;
+        if (i == rasenganPos[currRasengan].x + WIDTH_NARUTO) {
+            i = rasenganPos[currRasengan].x;
             j += 1;
         }
 
     }
 
-    i = ORIGIN_SASUKE_X_RIGHT;
-    j = ORIGIN_SASUKE_Y_RIGHT;
+
+    i = sasukePos.x;
+    j = sasukePos.y;
+    // i = sasukePos.x - WIDTH_SASUKE/2;
+    // j = sasukePos.y - HEIGHT_SASUKE/2;
 
     for (int k = 0; k < WIDTH_SASUKE * 2 * HEIGHT_SASUKE - 1; k += 2) {
 
@@ -681,78 +697,13 @@ void cls() {
 
         i += 1;
         
-        if (i == ORIGIN_SASUKE_X_RIGHT + WIDTH_SASUKE) {
-            i = ORIGIN_SASUKE_X_RIGHT;
+        if (i == sasukePos.x + WIDTH_SASUKE) {
+            i = sasukePos.x;
             j += 1;
         }
 
     }
 
-    i = ORIGIN_SASUKE_X_LEFT;
-    j = ORIGIN_SASUKE_Y_LEFT;
-
-    for (int k = 0; k < WIDTH_SASUKE * 2 * HEIGHT_SASUKE - 1; k += 2) {
-
-        int red = ((data_sasuke[k + 1] & 0xF8) >> 3) << 11;
-        int green = (((data_sasuke[k] & 0xE0) >> 5)) | ((data_sasuke[k + 1] & 0x7) << 3);
-        int blue = (data_sasuke[k] & 0x1f);
-
-        short int p = red | ((green << 5) | blue);
-
-        plot_pixel(i, j, p);
-
-        i += 1;
-        
-        if (i == ORIGIN_SASUKE_X_LEFT + WIDTH_SASUKE) {
-            i = ORIGIN_SASUKE_X_LEFT;
-            j += 1;
-        }
-
-    }
-
-    i = ORIGIN_SASUKE_X_TOP;
-    j = ORIGIN_SASUKE_Y_TOP;
-
-    for (int k = 0; k < WIDTH_SASUKE * 2 * HEIGHT_SASUKE - 1; k += 2) {
-
-        int red = ((data_sasuke[k + 1] & 0xF8) >> 3) << 11;
-        int green = (((data_sasuke[k] & 0xE0) >> 5)) | ((data_sasuke[k + 1] & 0x7) << 3);
-        int blue = (data_sasuke[k] & 0x1f);
-
-        short int p = red | ((green << 5) | blue);
-
-        plot_pixel(i, j, p);
-
-        i += 1;
-        
-        if (i == ORIGIN_SASUKE_X_TOP + WIDTH_SASUKE) {
-            i = ORIGIN_SASUKE_X_TOP;
-            j += 1;
-        }
-
-    }
-
-    i = ORIGIN_SASUKE_X_BOTTOM;
-    j = ORIGIN_SASUKE_Y_BOTTOM;
-
-    for (int k = 0; k < WIDTH_SASUKE * 2 * HEIGHT_SASUKE - 1; k += 2) {
-
-        int red = ((data_sasuke[k + 1] & 0xF8) >> 3) << 11;
-        int green = (((data_sasuke[k] & 0xE0) >> 5)) | ((data_sasuke[k + 1] & 0x7) << 3);
-        int blue = (data_sasuke[k] & 0x1f);
-
-        short int p = red | ((green << 5) | blue);
-
-        plot_pixel(i, j, p);
-
-        i += 1;
-        
-        if (i == ORIGIN_SASUKE_X_BOTTOM + WIDTH_SASUKE) {
-            i = ORIGIN_SASUKE_X_BOTTOM;
-            j += 1;
-        }
-
-    }
 
 
 }
