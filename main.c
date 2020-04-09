@@ -889,7 +889,7 @@ void plot_pixel_naruto(int x, int y, short int line_color);
 void plot_pixel_bg(int x, int y, short int line_color);
 void plot_pixel(int x, int y, short int line_color);
 void cls();
-void mod_cls();
+void cls_pause();
 void swap(int*, int*);
 void await_vsync();
 void swap_buffers();
@@ -1142,8 +1142,9 @@ void drawScore() {
 }
 
 void drawPauseScreen() {
-    // pause screen responds to switchToggled
-    // also used as start screen?
+    cls_pause();
+    await_vsync();
+    swap_buffers();
     return;
 }
 
