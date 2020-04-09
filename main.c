@@ -866,6 +866,8 @@ int switchToggled;
 volatile int *SW_ptr = 0xFF200040;
 volatile int *KEY_ptr = 0xFF200050;
 volatile int *LEDR_ptr = 0xFF200000;
+volatile int *HEX3_0_ptr = 0xFF200020;
+int seg7[] = {0b00111111, 0b00000110, 0b01011011, 0b01001111, 0b01100110, 0b01101101, 0b01111101, 0b00000111, 0b01111111, 0b01100111};
 
 // sasuke stuff
 loc sasukePos;
@@ -1032,10 +1034,13 @@ int main() {
 }
 
 void checkInputOutput() {
-    // update values of switch and 
+    // inputs 
     keyPressed = *KEY_ptr;
     switchToggled = *SW_ptr;
-    *LEDR_ptr = waveCounter;
+
+    // outputs
+    *LEDR_ptr = scoreCounter;
+    *HEX3_0_ptr = seg7[scoreCounter & 0xF] | seg7[scoreCounter>>4 & 0xF]<<8  | seg7[scoreCounter>>8]<<16;
 }
 
 bool checkGameOver() {
