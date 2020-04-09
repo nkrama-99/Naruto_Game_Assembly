@@ -349,7 +349,8 @@ loc rasenganInitPos[8];
 loc rasenganMoveDirection[8];
 int currRasengan;
 int scoreCounter = 0;
-int rasenganSpeed = 20;
+int rasenganSpeed = 10;
+int waveCounter = 0;
 
 // drawing stuff
 volatile int pixel_buffer_start;
@@ -376,6 +377,7 @@ void drawPauseScreen();
 void controlSasuke();
 void controlNaruto();
 void controlRasengan();
+void checkRasenganSpeed();
 
 // main code
 int main() {
@@ -480,6 +482,9 @@ int main() {
     while (!checkGameOver()) {
     // while (true) {
 
+        // draw the game
+        drawGame();
+
         // check game pause or play
         checkGameStatus(); 
 
@@ -490,10 +495,8 @@ int main() {
         controlSasuke();
         controlNaruto();
         controlRasengan();
-
-        // draw the game
-        drawGame();
-
+        checkRasenganSpeed();
+        
     }
 
     drawGameOver();
@@ -505,7 +508,7 @@ void checkInputOutput() {
     // update values of switch and 
     keyPressed = *KEY_ptr;
     switchToggled = *SW_ptr;
-    *LEDR_ptr = rasenganSpeed;
+    *LEDR_ptr = waveCounter;
 }
 
 bool checkGameOver() {
@@ -566,6 +569,11 @@ bool checkGameOver() {
         }
     }
 
+    // rasengan is too fast
+    if (rasenganSpeed >= 40) {
+        return true;
+    }
+
     return false;
 }
 
@@ -580,8 +588,9 @@ void checkGameStatus() {
 }
 
 void checkRasenganSpeed() {
-    if (scoreCounter % 10 == 0) {
+    if (scoreCounter % 10 == 0 && scoreCounter != 0) {
         rasenganSpeed += 10;
+        waveCounter++;
     }
 
     return;
