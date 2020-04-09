@@ -349,7 +349,7 @@ loc rasenganInitPos[8];
 loc rasenganMoveDirection[8];
 int currRasengan;
 int scoreCounter = 0;
-int rasenganSpeed = 10;
+int rasenganSpeed = 20;
 
 // drawing stuff
 volatile int pixel_buffer_start;
@@ -380,6 +380,7 @@ void controlRasengan();
 // main code
 int main() {
 
+    // Initial configuration
     // Rasengan Current Position
     // N
     rasenganPos[0].x = 160;
@@ -458,6 +459,23 @@ int main() {
     rasenganMoveDirection[7].x = 1;
     rasenganMoveDirection[7].y = 1;
 
+    // Drawing initial Setup
+    /* Read location of the pixel buffer from the pixel buffer controller */
+    pixel_buffer_start = *pixel_ctrl_ptr;
+
+    /* set front pixel buffer to start of FPGA On-chip memory */
+    *(pixel_ctrl_ptr + 1) = (int)0xC8000000; // first store the address in the 			
+
+    /* now, swap the front/back buffers, to set the front buffer location */
+    await_vsync();
+
+    /* initialize a pointer to the pixel buffer, used by drawing functions */
+    pixel_buffer_start = *pixel_ctrl_ptr;
+
+    *(pixel_ctrl_ptr + 1) = (int)0xC0000000;
+    pixel_buffer_start = *(pixel_ctrl_ptr + 1); // we draw on the back buffer	
+
+
     // main game loop
     while (!checkGameOver()) {
     // while (true) {
@@ -487,7 +505,7 @@ void checkInputOutput() {
     // update values of switch and 
     keyPressed = *KEY_ptr;
     switchToggled = *SW_ptr;
-    *LEDR_ptr = scoreCounter;
+    *LEDR_ptr = rasenganSpeed;
 }
 
 bool checkGameOver() {
@@ -574,22 +592,6 @@ void drawGameOver() {
 }
 
 void drawGame() {
-    /* Read location of the pixel buffer from the pixel buffer controller */
-    pixel_buffer_start = *pixel_ctrl_ptr;
-
-    /* set front pixel buffer to start of FPGA On-chip memory */
-    *(pixel_ctrl_ptr + 1) = (int)0xC8000000; // first store the address in the 			
-
-    /* now, swap the front/back buffers, to set the front buffer location */
-    await_vsync();
-
-    /* initialize a pointer to the pixel buffer, used by drawing functions */
-    pixel_buffer_start = *pixel_ctrl_ptr;
-
-    *(pixel_ctrl_ptr + 1) = (int)0xC0000000;
-    pixel_buffer_start = *(pixel_ctrl_ptr + 1); // we draw on the back buffer	
-
-    /* set back pixel buffer to start of SDRAM memory */
     cls();
     await_vsync();
     swap_buffers();
@@ -611,39 +613,81 @@ void drawPauseScreen() {
 
 void controlSasuke() {
     
-    if (keyPressed == 1) {
+    // if (keyPressed == 0b0100) {
+    //     // N
+    //     sasukePos.x = 160;
+    //     sasukePos.y = 100;
+    // } else if (keyPressed == 0b0101) {
+    //     // NE
+    //     sasukePos.x = 180;
+    //     sasukePos.y = 100;
+    // } else if (keyPressed == 0b0001) {
+    //     // E
+    //     sasukePos.x = 180;
+    //     sasukePos.y = 120;
+    // } else if (keyPressed == 0b0011) {
+    //     // SE
+    //     sasukePos.x = 180;
+    //     sasukePos.y = 140;
+    // } else if (keyPressed == 0b0010) {
+    //     // S
+    //     sasukePos.x = 160;
+    //     sasukePos.y = 140;
+    // } else if (keyPressed == 0b1010) {
+    //     // SW
+    //     sasukePos.x = 140;
+    //     sasukePos.y = 140;
+    // } else if (keyPressed == 0b1000) {
+    //     // W
+    //     sasukePos.x = 140;
+    //     sasukePos.y = 120;
+    // } else if (keyPressed == 0b1100) {
+    //     // NW
+    //     sasukePos.x = 140;
+    //     sasukePos.y = 100;
+    // } else if (keyPressed == 0b1111) {
+    //     // enable god mode - invincible?
+    //     sasukePos.x = 160;
+    //     sasukePos.y = 120;
+    // } else {
+    //     // centre
+    //     sasukePos.x = 160;
+    //     sasukePos.y = 120;
+    // }
+
+    if (keyPressed == 0b0100) {
         // N
         sasukePos.x = 160;
-        sasukePos.y = 100;
-    } else if (keyPressed == 2) {
+        sasukePos.y = 100 - rasenganSpeed;
+    } else if (keyPressed == 0b0101) {
         // NE
-        sasukePos.x = 180;
-        sasukePos.y = 100;
-    } else if (keyPressed == 3) {
+        sasukePos.x = 180 + rasenganSpeed;
+        sasukePos.y = 100 - rasenganSpeed;
+    } else if (keyPressed == 0b0001) {
         // E
-        sasukePos.x = 180;
+        sasukePos.x = 180 + rasenganSpeed;
         sasukePos.y = 120;
-    } else if (keyPressed == 4) {
+    } else if (keyPressed == 0b0011) {
         // SE
-        sasukePos.x = 180;
-        sasukePos.y = 140;
-    } else if (keyPressed == 5) {
+        sasukePos.x = 180 + rasenganSpeed;
+        sasukePos.y = 140 + rasenganSpeed;
+    } else if (keyPressed == 0b0010) {
         // S
         sasukePos.x = 160;
-        sasukePos.y = 140;
-    } else if (keyPressed == 6) {
+        sasukePos.y = 140 + rasenganSpeed;
+    } else if (keyPressed == 0b1010) {
         // SW
-        sasukePos.x = 140;
-        sasukePos.y = 140;
-    } else if (keyPressed == 7) {
+        sasukePos.x = 140 - rasenganSpeed;
+        sasukePos.y = 140 + rasenganSpeed;
+    } else if (keyPressed == 0b1000) {
         // W
-        sasukePos.x = 140;
+        sasukePos.x = 140 - rasenganSpeed;
         sasukePos.y = 120;
-    } else if (keyPressed == 8) {
+    } else if (keyPressed == 0b1100) {
         // NW
-        sasukePos.x = 140;
-        sasukePos.y = 100;
-    } else if (keyPressed == 100) {
+        sasukePos.x = 140 - rasenganSpeed;
+        sasukePos.y = 100 - rasenganSpeed;
+    } else if (keyPressed == 0b1111) {
         // enable god mode - invincible?
         sasukePos.x = 160;
         sasukePos.y = 120;
