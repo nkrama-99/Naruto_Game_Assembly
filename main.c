@@ -848,12 +848,6 @@ unsigned int data_game_end[] = {
 #define WIDTH_RASENGAN 12
 #define HEIGHT_RASENGAN 12
 
-// #define ORIGIN_SASUKE_X 0
-// #define ORIGIN_SASUKE_Y 120
-
-// #define ORIGIN_NARUTO_X 0
-// #define ORIGIN_NARUTO_Y 0
-
 // declaration of values and keys used
 typedef struct currentLocation{
     int x;
@@ -1009,8 +1003,8 @@ int main() {
 
 
     // main game loop
-    while (!checkGameOver()) {
-    // while (true) {
+    // while (!checkGameOver()) {
+    while (true) {
 
         // check game pause or play
         checkGameStatus(); 
@@ -1121,10 +1115,10 @@ void checkGameStatus() {
 }
 
 void checkRasenganSpeed() {
-    if (scoreCounter % 5 == 0 && scoreCounter != 0) {
-        rasenganSpeed += 2;
-        waveCounter++;
-    }
+    // if (scoreCounter % 5 == 0 && scoreCounter != 0) {
+    //     rasenganSpeed += 2;
+    //     waveCounter++;
+    // }
 
     return;
 }
